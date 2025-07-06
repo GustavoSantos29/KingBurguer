@@ -1,35 +1,35 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:projetomobile/daos/ClienteDao.dart';
 import 'package:projetomobile/pages/CreateAccountPage.dart';
 import 'package:projetomobile/services/AuthService.dart';
 import 'package:provider/provider.dart';
+
 import '../providers/ClienteProvider.dart';
-import 'HomePage.dart';
+
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
-
   @override
   State<LoginPage> createState() => _LoginPageState();
 }
 
 class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
-  TextEditingController emailController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
+  TextEditingController _emailController = TextEditingController();
+  TextEditingController _passwordController = TextEditingController();
 
-  final AuthService authService = AuthService();
+  final AuthService _authService = AuthService();
 
   void _login() async {
     if (_formKey.currentState!.validate()) {
-      final email = emailController.text.trim();
-      final password = passwordController.text.trim();
-      final cliente = await authService.login(email, password);
+      final cliente = await _authService.login(
+          _emailController.text, _passwordController.text
+      );
 
-      if (cliente != null) {
-        Provider.of<ClienteProvider>(context, listen: false).setCliente(cliente);
+      if (cliente != null && mounted) {
+        context.read<ClienteProvider>().updateCliente(cliente);
         Navigator.pushReplacementNamed(context, '/Homepage');
-      } else {
+
+      } else if (mounted){
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Email ou senha inválidos!')),
         );
@@ -79,7 +79,7 @@ class _LoginPageState extends State<LoginPage> {
             ),
             Padding(padding: EdgeInsets.only(left: 15, right: 15, bottom: 30),
               child: TextFormField(
-                controller: emailController,
+                controller: _emailController,
                 keyboardType: TextInputType.emailAddress,
                 validator: (value){
                   if(value == null || value.isEmpty){
@@ -129,7 +129,7 @@ class _LoginPageState extends State<LoginPage> {
             ),
             Padding(padding: EdgeInsets.only(left: 15, right: 15, bottom: 10),
               child: TextFormField(
-                controller: passwordController,
+                controller: _passwordController,
                 obscureText: true,
                 validator: (password){
                   if(password == null || password.isEmpty){

@@ -1,11 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import 'ingrediente.dart';
+
 class Lanche {
   final int id;
   final String name;
   final String description;
-  final List<String> ingredients;
+  final List<Ingrediente> ingredientes;
   final double price;
   final String? image;
 
@@ -13,7 +15,7 @@ class Lanche {
     required this.id,
     required this.name,
     required this.description,
-    required this.ingredients,
+    required this.ingredientes,
     required this.price,
      this.image,
   });
@@ -27,14 +29,16 @@ class Lanche {
       'image': image,
     };
   }
-  factory Lanche.fromMap(Map<String, dynamic> map, List<String> ingredientes) {
+  factory Lanche.fromMap(Map<String, dynamic> map) {
     return Lanche(
       id: map['id'],
       name: map['name'],
       description: map['description'],
-      price: map['price'],
+      price: (map['price'] as num).toDouble(),
       image: map['image'],
-      ingredients: ingredientes,
+      ingredientes: (map['ingredientes'] as List)
+          .map((e) => Ingrediente.fromMap(e))
+          .toList(),
     );
   }
 

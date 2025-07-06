@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:projetomobile/daos/ClienteDao.dart';
 import 'package:projetomobile/models/cliente.dart';
 import 'package:projetomobile/pages/LoginPage.dart';
 import 'package:projetomobile/services/AuthService.dart';
@@ -18,29 +17,29 @@ class CreateAccountPage extends StatefulWidget {
 class _CreateAccountPageState extends State<CreateAccountPage> {
   final _formKey = GlobalKey<FormState>();
 
-  final TextEditingController nameController = TextEditingController();
-  final TextEditingController addressController = TextEditingController();
-  final TextEditingController phoneController = TextEditingController();
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _addressController = TextEditingController();
+  final TextEditingController _phoneController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
   final TextEditingController confirmPasswordController = TextEditingController();
 
   final AuthService authService = AuthService();
 
   void _siginUp() async{
     if(_formKey.currentState!.validate()){
-      if(passwordController.text != confirmPasswordController.text){
+      if(_passwordController.text != confirmPasswordController.text){
         ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text('As senhas não coincidem!'))
         );
         return;
       }
       final newCliente = Cliente(
-        name: nameController.text,
-        address: addressController.text,
-        phone: phoneController.text,
-        email: emailController.text,
-        password: passwordController.text,
+        name: _nameController.text,
+        address: _addressController.text,
+        phone: _phoneController.text,
+        email: _emailController.text,
+        password: _passwordController.text,
         image: null,
       );
 
@@ -51,9 +50,10 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
           const SnackBar(content: Text('Conta criada com sucesso!')),
         );
         Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginPage()));
+
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(error)),
+          SnackBar(content: Text('error')),
 
         );
         return;
@@ -107,7 +107,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
             ),
             Padding(padding: EdgeInsets.only(left: 15, right: 15, bottom: 30),
               child: TextFormField(
-                controller: nameController,
+                controller: _nameController,
                 validator: (value){
                   if(value == null || value.isEmpty){
                     return 'Informe seu nome';
@@ -156,7 +156,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
             ),
             Padding(padding: EdgeInsets.only(left: 15, right: 15, bottom: 30),
               child: TextFormField(
-                controller: addressController,
+                controller: _addressController,
                 validator: (value){
                   if(value == null || value.isEmpty){
                     return 'Informe seu endereço';
@@ -205,7 +205,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
             ),
             Padding(padding: EdgeInsets.only(left: 15, right: 15, bottom: 30),
               child: TextFormField(
-                controller: phoneController,
+                controller: _phoneController,
                 validator: (value){
                   if(value == null || value.isEmpty){
                     return 'Informe seu telefone';
@@ -254,7 +254,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
             ),
             Padding(padding: EdgeInsets.only(left: 15, right: 15, bottom: 30),
               child: TextFormField(
-                controller: emailController,
+                controller: _emailController,
                 keyboardType: TextInputType.emailAddress,
                 validator: (value){
                   if(value == null || value.isEmpty){
@@ -307,7 +307,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
             ),
             Padding(padding: EdgeInsets.only(left: 15, right: 15, bottom: 30),
               child: TextFormField(
-                controller: passwordController,
+                controller: _passwordController,
                 obscureText: true,
                 validator: (value){
                   if(value == null || value.isEmpty){

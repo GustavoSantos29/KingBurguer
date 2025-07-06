@@ -1,13 +1,119 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:projetomobile/pages/HomePage.dart';
-import 'package:projetomobile/widgets/AppDrawner.dart';
-
+import 'package:projetomobile/widgets/AppDrawer.dart';
+import 'package:provider/provider.dart';
 import '../models/lanche.dart';
+import '../providers/CarrinhoProvider.dart';
 
 class LancheDetailPage extends StatelessWidget {
-  final Lanche lanche;
-  const LancheDetailPage({super.key, required this.lanche});
+  final Lanche _lanche;
+  const LancheDetailPage({super.key, required Lanche lanche}) : _lanche = lanche;
+
+
+  void _abrirModalAdicionar(BuildContext context, Lanche lanche) {
+    int quantidade = 1;
+
+    final scaffoldContext = context; // contexto com acesso ao Provider
+
+    showDialog(
+      context: context,
+      builder: (_) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          content: StatefulBuilder(
+            builder: (context, setState) {
+              return SizedBox(
+                width: MediaQuery.of(context).size.width * 0.8,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Text(
+                      'Quantidade',
+                      style: TextStyle(
+                        fontSize: 20,
+                        color: Colors.red,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        IconButton(
+                          icon: const Icon(Icons.remove, color: Colors.red, size: 30),
+                          onPressed: () {
+                            if (quantidade > 1) {
+                              setState(() => quantidade--);
+                            }
+                          },
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                          child: Text(
+                            '$quantidade',
+                            style: const TextStyle(
+                              fontSize: 40,
+                              color: Colors.red,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                        IconButton(
+                          icon: const Icon(Icons.add, color: Colors.red, size: 30),
+                          onPressed: () {
+                            setState(() => quantidade++);
+                          },
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 20),
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.red,
+                          padding: const EdgeInsets.symmetric(vertical: 12),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                        ),
+                        onPressed: () {
+                          scaffoldContext.read<CarrinhoProvider>().adicionar(lanche, quantidade);
+                          Navigator.pop(context);
+                        },
+                        child: const Text(
+                          'Adicionar ao Carrinho',
+                          style: TextStyle(fontSize: 18, color: Colors.white),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                     OutlinedButton(
+                        onPressed: () => Navigator.pop(context),
+                        style: OutlinedButton.styleFrom(
+                          foregroundColor: Colors.red,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadiusGeometry.circular(12),
+                          ),
+                          side: const BorderSide(color: Colors.red),
+                        ),
+                        child: const Text('Cancelar'),
+                      ),
+
+                  ],
+                ),
+              );
+            },
+          ),
+        );
+      },
+    );
+  }
+
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +144,7 @@ class LancheDetailPage extends StatelessWidget {
               ),
             ),
             Text(
-                  '${lanche.name}',
+                  '${_lanche.name}',
                   style: TextStyle(
                       fontSize: 40
                   ),
@@ -62,7 +168,7 @@ class LancheDetailPage extends StatelessWidget {
                 width: 350,
                 padding: EdgeInsets.symmetric(vertical: 20, horizontal: 10),
                 child: Text(''
-                  '${lanche.description}',
+                  '${_lanche.description}',
                   textAlign: TextAlign.start,
                   style: TextStyle(
                   fontSize: 14,
@@ -82,7 +188,7 @@ class LancheDetailPage extends StatelessWidget {
                 width: 350,
                 padding: EdgeInsets.symmetric(vertical: 20, horizontal: 10),
                 child: Text(
-                  '${lanche.ingredients.join(', ')}',
+                  '${_lanche.ingredientes.map((i) => i.name).join(', ')}',
                   textAlign: TextAlign.start,
                   style: TextStyle(
                     fontSize: 14,
@@ -100,8 +206,7 @@ class LancheDetailPage extends StatelessWidget {
                       borderRadius: BorderRadius.circular(8),
                     ),
                   ),
-                  onPressed: () {
-                    print('Botão pressionado');
+                  onPressed: () {_abrirModalAdicionar(context,_lanche);
                   },
                   child: Row(
                     mainAxisSize: MainAxisSize.min,

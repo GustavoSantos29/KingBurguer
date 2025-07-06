@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:projetomobile/daos/ClienteDao.dart';
 import 'package:projetomobile/models/cliente.dart';
-import 'package:projetomobile/widgets/AppDrawner.dart';
+import 'package:projetomobile/services/AuthService.dart';
+import 'package:projetomobile/widgets/AppDrawer.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/ClienteProvider.dart';
@@ -14,24 +14,25 @@ class Editprofile extends StatefulWidget {
 }
 
 class _EditprofileState extends State<Editprofile> {
-  late TextEditingController nameController;
-  late TextEditingController addressController;
-  late TextEditingController phoneController;
+  late TextEditingController _nameController;
+  late TextEditingController _addressController;
+  late TextEditingController _phoneController;
+  final _authService = AuthService();
 
   @override
   void initState() {
     super.initState();
     final cliente = context.read<ClienteProvider>().cliente;
-    nameController = TextEditingController(text: cliente?.name ?? '');
-    addressController = TextEditingController(text: cliente?.address ?? '');
-    phoneController = TextEditingController(text: cliente?.phone ?? '');
+    _nameController = TextEditingController(text: cliente?.name ?? '');
+    _addressController = TextEditingController(text: cliente?.address ?? '');
+    _phoneController = TextEditingController(text: cliente?.phone ?? '');
   }
 
   @override
   void dispose() {
-    nameController.dispose();
-    addressController.dispose();
-    phoneController.dispose();
+    _nameController.dispose();
+    _addressController.dispose();
+    _phoneController.dispose();
     super.dispose();
   }
 
@@ -40,28 +41,24 @@ class _EditprofileState extends State<Editprofile> {
     final cliente = clienteProvider.cliente;
 
     if (cliente == null) return;
+    try {
+      final token = await AuthService().getToken();
 
-    await ClienteDao().updateCliente(
-      id: cliente.id!,
-      name: nameController.text,
-      address: addressController.text,
-      phone: phoneController.text,
-      image: cliente.image,
-    );
+      final updatedCliente = await _authService.updateCliente(
+        name: _nameController.text,
+        address: _addressController.text,
+        phone: _phoneController.text,
+      );
 
-    clienteProvider.updateCliente(
-      Cliente(
-        id: cliente.id,
-        name: nameController.text,
-        address: addressController.text,
-        phone: phoneController.text,
-        email: cliente.email,
-        password: cliente.password,
-        image: cliente.image,
-      ),
-    );
+      clienteProvider.updateCliente(updatedCliente);
 
-    Navigator.pop(context);
+      Navigator.pop(context);
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Erro ao atualizar: $e')),
+      );
+    }
+
   }
 
   @override
@@ -111,7 +108,7 @@ class _EditprofileState extends State<Editprofile> {
               child: Text('Nome', style: TextStyle(color: Colors.red)),
             ),
             TextField(
-              controller: nameController,
+              controller: _nameController,
               decoration: _inputDecoration('Digite seu nome'),
             ),
             const SizedBox(height: 16),
@@ -120,7 +117,7 @@ class _EditprofileState extends State<Editprofile> {
               child: Text('Endereço', style: TextStyle(color: Colors.red)),
             ),
             TextField(
-              controller: addressController,
+              controller: _addressController,
               decoration: _inputDecoration('Digite seu endereço'),
             ),
             const SizedBox(height: 16),
@@ -129,7 +126,7 @@ class _EditprofileState extends State<Editprofile> {
               child: Text('Telefone', style: TextStyle(color: Colors.red)),
             ),
             TextField(
-              controller: phoneController,
+              controller: _phoneController,
               decoration: _inputDecoration('(55) 99999-9999'),
               keyboardType: TextInputType.phone,
             ),

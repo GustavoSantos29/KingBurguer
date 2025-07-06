@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:projetomobile/widgets/AppDrawner.dart';
+import 'package:projetomobile/services/LancheService.dart';
+import 'package:projetomobile/widgets/AppDrawer.dart';
 import 'package:provider/provider.dart';
-
-import '../daos/LancheDao.dart';
 import '../models/lanche.dart';
 import '../providers/ClienteProvider.dart';
 import '../widgets/lancheCard.dart';
@@ -15,10 +14,10 @@ class Homepage extends StatefulWidget {
 }
 
 class _HomepageState extends State<Homepage> {
-  final LancheDao lancheDao = LancheDao();
   List<Lanche> _allLanches = [];
   List<Lanche> _lanches = [];
-  final TextEditingController searchController = TextEditingController();
+  final TextEditingController _searchController = TextEditingController();
+  final LancheService _lancheService = LancheService();
 
   @override
   void initState() {
@@ -27,11 +26,17 @@ class _HomepageState extends State<Homepage> {
   }
 
   void _loadLanches() async {
-    final lanches = await lancheDao.getAllLanches();
-    setState(() {
-      _allLanches = lanches;
-      _lanches = lanches;
-    });
+    try {
+      final lanches = await _lancheService.getLanches();
+      setState(() {
+        _allLanches = lanches;
+        _lanches = lanches;
+      });
+    }catch(error){
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('lanches nao adicionados ainda!')),
+      );
+    }
   }
 
   void _searchLanches(String query) async {
@@ -42,7 +47,13 @@ class _HomepageState extends State<Homepage> {
       return;
     }
 
-    final lanchesEncontrados = await lancheDao.searchLanches(query);
+    final lanchesEncontrados = _allLanches.where((lanche) {
+      final lowerQuery = query.toLowerCase();
+      return lanche.name.toLowerCase().contains(lowerQuery) ||
+          lanche.description.toLowerCase().contains(lowerQuery) ||
+          lanche.ingredientes.any((i) => i.name.toLowerCase().contains(lowerQuery));
+    }).toList();
+
     setState(() {
       _lanches = lanchesEncontrados.isEmpty ? List.from(_allLanches) : lanchesEncontrados;
     });
@@ -73,7 +84,7 @@ class _HomepageState extends State<Homepage> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
             child: SearchBar(
-              controller: searchController,
+              controller: _searchController,
               hintText: 'Buscar Lanche',
               leading: const Icon(Icons.search),
               backgroundColor: WidgetStatePropertyAll(Colors.grey[200]),
