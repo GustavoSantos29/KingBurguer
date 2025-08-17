@@ -1,5 +1,6 @@
 generator client {
   provider = "prisma-client-js"
+  binaryTargets = ["native", "debian-openssl-3.0.x"]
 }
 
 datasource db {
@@ -15,6 +16,7 @@ model Lanche {
   image       String
   ingredientes LancheIngrediente[]
   comprasLanches CompraLanche[]
+  active Boolean @default(true)
 }
 
 model Ingrediente {
@@ -24,11 +26,11 @@ model Ingrediente {
 }
 
 model LancheIngrediente {
-  lanche_id      Int
-  ingrediente_id Int
-  lanche         Lanche      @relation(fields: [lanche_id], references: [id], onDelete: Cascade)
-  ingrediente    Ingrediente @relation(fields: [ingrediente_id], references: [id], onDelete: Cascade)
-  @@id([lanche_id, ingrediente_id])
+  lancheId      Int
+  ingredienteId Int
+  lanche         Lanche      @relation(fields: [lancheId], references: [id], onDelete: Cascade)
+  ingrediente    Ingrediente @relation(fields: [ingredienteId], references: [id], onDelete: Cascade)
+  @@id([lancheId, ingredienteId])
 }
 
 model Cliente {
@@ -41,6 +43,15 @@ model Cliente {
   image    String?
   compras  Compra[]
 }
+
+model Admin {
+  id       Int      @id @default(autoincrement())
+  name     String
+  email    String   @unique
+  password String
+}
+
+
 
 model Compra {
   id           Int            @id @default(autoincrement())
