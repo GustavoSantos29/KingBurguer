@@ -9,4 +9,3 @@ router.get('/compras', authenticateToken, authController.listarCompras);
 
 module.exports = router;
 
-
