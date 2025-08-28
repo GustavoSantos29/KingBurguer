@@ -1,3 +1,11 @@
+<img width="1116" height="739" alt="image" src="https://github.com/user-attachments/assets/4b18c460-a96b-4151-8eee-c253e7c3072a" />
+
+<img width="613" height="476" alt="image" src="https://github.com/user-attachments/assets/4594e8c3-329c-40f9-9b19-8fe73894b321" />
+
+
+
+
+
 🇧🇷 Projeto Hamburgueria
 Um projeto feito utilizando Flutter e JavaScript, criado com o propósito de simular um aplicativo de uma hamburgueria real.
 O aplicativo conta com sistema de:
