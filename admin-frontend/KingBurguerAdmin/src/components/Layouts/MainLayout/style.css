@@ -1,0 +1,12 @@
+
+.main-content {
+  margin-top: 2vh;
+  overflow-y: auto;
+  word-break: break-all;
+  text-align: center;
+  width: 90vw;
+  height: 85vh;
+  margin-bottom: 4vh;
+  align-items: center;
+  background-color: var(--bg-light-gray);
+}

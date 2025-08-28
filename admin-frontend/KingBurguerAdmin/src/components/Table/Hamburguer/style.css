@@ -1,0 +1,72 @@
+th {
+  font-size: 1.8rem;
+  font-weight: 300;
+  font-style: italic;
+}
+
+.table-container {
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+.table {
+  width: 90vw;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.table-header {
+  background-color: var(--bg-gray);
+  color: var(--black);
+  height: 7vh;
+  width: 100%;
+  justify-content: space-around;
+
+  position: sticky;
+  top: 0;
+
+  z-index: 10;
+}
+
+.table-row {
+  width: 100%;
+  justify-content: space-around;
+}
+
+.row-content {
+  color: var(--default-gray);
+  padding: 2vh 8px;
+  font-size: 1.4rem;
+  font-weight: 300;
+  height: 5vh;
+}
+
+.separator-line {
+  width: 95%;
+  height: 2px;
+  background-color: var(--default-gray);
+  margin: 0 auto;
+}
+.separator-row td {
+  padding: 0;
+  background: transparent;
+}
+
+.product-name {
+  font-size: 2rem;
+}
+
+.product-info {
+  font-weight: 300;
+  font-style: italic;
+}
+
+.table-button {
+  cursor: pointer;
+  background-color: transparent;
+  border: none;
+}
+
+.table-button:hover {
+  opacity: 0.8;
+}

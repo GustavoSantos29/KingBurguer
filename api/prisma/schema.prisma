@@ -10,27 +10,37 @@ datasource db {
 
 model Lanche {
   id          Int                @id @default(autoincrement())
-  name        String
+  name        String @unique
   description String
   price       Float
   image       String
   ingredientes LancheIngrediente[]
-  comprasLanches CompraLanche[]
+  compra      CompraItem[]
   active Boolean @default(true)
 }
 
 model Ingrediente {
   id    Int                @id @default(autoincrement())
   name  String
+  quantidadeEstoque Int
+  unidadeMedida  String
   lanches LancheIngrediente[]
 }
 
 model LancheIngrediente {
   lancheId      Int
   ingredienteId Int
+  quantidadePadrão  Int @default(1)
   lanche         Lanche      @relation(fields: [lancheId], references: [id], onDelete: Cascade)
   ingrediente    Ingrediente @relation(fields: [ingredienteId], references: [id], onDelete: Cascade)
   @@id([lancheId, ingredienteId])
+}
+
+model Acompanhamento {
+  id Int                @id @default(autoincrement())
+  name String       
+  quantidadeEstoque Int
+  compra CompraItem[]
 }
 
 model Cliente {
@@ -59,17 +69,20 @@ model Compra {
   total        Float
   observacao   String?
   cliente      Cliente        @relation(fields: [clienteId], references: [id])
-  lanches      CompraLanche[]
+  itens      CompraItem[]
   createdAt    DateTime       @default(now())
   address       String
 }
 
-model CompraLanche {
+model CompraItem {
+  id        Int @id @default(autoincrement())
+  lancheId        Int?    
+  lanche          Lanche?        @relation(fields: [lancheId], references: [id])
+  acompanhamentoId Int? 
+  acompanhamento  Acompanhamento? @relation(fields: [acompanhamentoId], references: [id])
   quantidade Int
   compraId Int
-  lancheId Int
-  compra   Compra @relation(fields: [compraId], references: [id], onDelete: Cascade)
-  lanche   Lanche @relation(fields: [lancheId], references: [id], onDelete: Cascade)
-
-  @@id([compraId, lancheId])
+  nomeDoProduto  String
+  valorUnitario   Float
+  compra  Compra @relation(fields: [compraId], references: [id], onDelete: Cascade)
 }

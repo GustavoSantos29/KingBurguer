@@ -1,0 +1,60 @@
+.add-first-section {
+  display: flex;
+  gap: 20px;
+  text-align: start;
+}
+
+.add-left {
+  padding-top: 5vh;
+}
+
+.name{
+  padding-top: 2vh;
+}
+.add-image {
+  object-fit: cover;
+  width: 12vw;
+  height: 12vw;
+}
+
+.description {
+  display: flex;
+  text-align: left;
+  background-color: var(--white);
+  width: 75vw;
+  height: 16vh;
+  padding-left: 1vw;
+
+}
+
+.description-left {
+  width: 85%;
+}
+
+.description-right {
+  margin-top: 1%;
+  width: 50%;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.subtitle {
+  font-size: 1.6rem;
+}
+
+.buttons-section {
+  margin-top: 5vh;
+  justify-content: center;
+  display: flex;
+  gap: 2vw;
+  padding-bottom: 5vh;
+}
+
+.ingredients {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-left: 5vw;
+}

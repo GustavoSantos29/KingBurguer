@@ -1,0 +1,28 @@
+.input-text {
+  border: 2px solid var(--red);
+  border-radius: 5px;
+  width: 30vw;
+  height: 5vh;
+  padding: 1%;
+}
+
+.input-container {
+  position: relative;
+}
+.input-label {
+  justify-content: center;
+  position: absolute;
+}
+
+.input-label .input-span {
+  position: absolute;
+  right: 27vw;
+}
+
+.input-label .label-text {
+  font-size: 1.6rem;
+  position: absolute;
+  color: var(--red);
+  right: 23vw;
+  top: -1vh;
+}

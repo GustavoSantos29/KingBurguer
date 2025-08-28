@@ -1,0 +1,50 @@
+.button {
+  cursor: pointer;
+  opacity: 1;
+  transition: 0.1s ease;
+  border-radius: 5px;
+  border: none;
+}
+
+.button:hover {
+  opacity: 0.8;
+}
+
+.filled {
+  color: var(--white);
+  outline: none;
+  background-color: var(--red);
+}
+
+.outlined {
+  color: var(--red);
+  background-color: var(--white);
+  outline: 2px solid var(--red);
+}
+
+.small {
+  font-size: 1.4rem;
+  width: 10vw;
+  height: 3.5vh;
+}
+
+.medium {
+  font-size: 2rem;
+  width: 20vw;
+  height: 5vh;
+}
+
+.large {
+  font-size: 2.4rem;
+  width: 30vw;
+  height: 6vh;
+}
+
+.disable{
+   opacity: 0.6;
+   cursor: not-allowed;
+}
+
+.disable:hover{
+   opacity: 0.6;
+}
